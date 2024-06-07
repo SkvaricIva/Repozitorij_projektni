@@ -26,7 +26,6 @@ fools
 april
 march
 first
-lingo
 booth
 shoes
 blink
@@ -98,3 +97,14 @@ fever
 glass
 nokia
 brush
+bride
+pools
+polls
+pills
+cakes
+takes
+tales
+talks
+walks
+files
+opens
