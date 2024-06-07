@@ -7,7 +7,6 @@
 using namespace std;
 const string WORDS_FILE = "words.txt";
 const string SCORES_FILE = "scores.dat";
-
 void loadWords(vector<string> &words)
 {
     ifstream file(WORDS_FILE);
@@ -23,14 +22,12 @@ void loadWords(vector<string> &words)
     }
     file.close();
 }
-
 string getRandomWord(const vector<string> &words)
 {
     srand(static_cast<unsigned int>(time(0)));
     int index = rand() % words.size();
     return words[index];
 }
-
 void saveScore(int score)
 {
     ofstream file(SCORES_FILE, ios::binary | ios::app);
@@ -42,7 +39,6 @@ void saveScore(int score)
     file.write(reinterpret_cast<const char *>(&score), sizeof(score));
     file.close();
 }
-
 void displayScores()
 {
     ifstream file(SCORES_FILE, ios::binary);
@@ -59,7 +55,6 @@ void displayScores()
     }
     file.close();
 }
-
 void playGame(const vector<string> &words)
 {
     string secret = getRandomWord(words);
@@ -101,7 +96,6 @@ void playGame(const vector<string> &words)
     }
     cout << "Kraj igre! Riječ je bila: " << secret << endl;
 }
-
 void displayTitle()
 {
     cout << " _    _               _  _      " << endl;
@@ -115,14 +109,12 @@ void displayTitle()
     cout << "Riječi moraju počinjati s malim slovom." << endl;
     cout << endl;
 }
-
 void displayMenu()
 {
     cout << "1. Započni igru" << endl;
     cout << "2. Pregled najboljih rezultata" << endl;
     cout << "3. Izlaz" << endl;
 }
-
 int main()
 {
     vector<string> words;
