@@ -112,6 +112,8 @@ void displayTitle()
     cout << " \\/  \\/ \\___/|_|  \\__,_||_|\\___|" << endl;
     cout << "====================================" << endl;
     cout << endl;
+    cout << "Riječi moraju počinjati s malim slovom." << endl;
+    cout << endl;
 }
 
 void displayMenu()
