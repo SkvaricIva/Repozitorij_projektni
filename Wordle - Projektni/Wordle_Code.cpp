@@ -128,11 +128,13 @@ void displayTitle()
     cout << " \\/  \\/ \\___/|_|  \\__,_||_|\\___|" << endl;
     cout << "====================================" << endl;
     cout << endl;
+    cout << "Rijec mora početi s malim slovom." << endl;
+    cout << endl;
 }
 void displayMenu()
 {
     cout << "1. Započni igru" << endl;
-    cout << "2. Opcije" << endl;
+    cout << "2. Modovi" << endl;
     cout << "3. Pregled najboljih rezultata" << endl;
     cout << "4. Izlaz" << endl;
 }
