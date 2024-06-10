@@ -5,10 +5,8 @@
 #include <ctime>
 #include <cstdlib>
 using namespace std;
-
 string SCORES_FILE = "en_5_scores.dat";
-string WORDS_FILE = "en_5.txt"; // Default file
-
+string WORDS_FILE = "en_5.txt";
 void loadWords(vector<string> &words)
 {
     ifstream infile(WORDS_FILE);
@@ -24,14 +22,12 @@ void loadWords(vector<string> &words)
     }
     infile.close();
 }
-
 string getRandomWord(const vector<string> &words)
 {
     srand(static_cast<unsigned int>(time(0)));
     int index = rand() % words.size();
     return words[index];
 }
-
 void saveScore(int score)
 {
     ofstream file(SCORES_FILE, ios::binary | ios::app);
@@ -43,7 +39,6 @@ void saveScore(int score)
     file.write(reinterpret_cast<const char *>(&score), sizeof(score));
     file.close();
 }
-
 void displayScores()
 {
     ifstream file(SCORES_FILE, ios::binary);
@@ -60,7 +55,6 @@ void displayScores()
     }
     file.close();
 }
-
 void displayBoard(const vector<string> &guesses, const string &secret, int wordLength)
 {
     cout << "---------------------------------------------" << endl;
@@ -71,17 +65,14 @@ void displayBoard(const vector<string> &guesses, const string &secret, int wordL
         {
             if (guess[i] == secret[i])
             {
-                // Zelena boja za točno slovo na točnoj poziciji
                 cout << "\033[32m  " << guess[i] << "  \033[0m|";
             }
             else if (secret.find(guess[i]) != string::npos)
             {
-                // Žuta boja za točno slovo na pogrešnoj poziciji
                 cout << "\033[33m  " << guess[i] << "  \033[0m|";
             }
             else
             {
-                // Siva boja za pogrešno slovo
                 cout << "\033[30m  " << guess[i] << "  \033[0m|";
             }
         }
@@ -89,7 +80,7 @@ void displayBoard(const vector<string> &guesses, const string &secret, int wordL
         cout << "---------------------------------------------" << endl;
     }
     for (int i = guesses.size(); i < 6; ++i)
-    { // 6 attempts in total
+    { 
         cout << "|";
         for (int j = 0; j < wordLength; ++j)
         {
@@ -99,13 +90,11 @@ void displayBoard(const vector<string> &guesses, const string &secret, int wordL
         cout << "---------------------------------------------" << endl;
     }
 }
-
 void playGame(const vector<string> &words, int wordLength)
 {
     string secret = getRandomWord(words);
     int attempts = 6;
     vector<string> guesses;
-
     while (attempts > 0)
     {
         string guess;
@@ -129,7 +118,6 @@ void playGame(const vector<string> &words, int wordLength)
     }
     cout << "Kraj igre! Riječ je bila: " << secret << endl;
 }
-
 void displayTitle()
 {
     cout << " _    _               _  _      " << endl;
@@ -141,7 +129,6 @@ void displayTitle()
     cout << "====================================" << endl;
     cout << endl;
 }
-
 void displayMenu()
 {
     cout << "1. Započni igru" << endl;
@@ -149,14 +136,12 @@ void displayMenu()
     cout << "3. Pregled najboljih rezultata" << endl;
     cout << "4. Izlaz" << endl;
 }
-
 void displayOptions()
 {
     cout << "Odaberi jezik:" << endl;
     cout << "1. Hrvatski" << endl;
     cout << "2. Engleski" << endl;
 }
-
 void displayGameModeOptions()
 {
     cout << "Odaberi duljinu riječi:" << endl;
@@ -165,35 +150,30 @@ void displayGameModeOptions()
     cout << "3. 6-slova" << endl;
     cout << "4. 7-slova" << endl;
 }
-
 void setWordsAndScoresFile(int language, int mode)
 {
     string langPrefix = (language == 1) ? "hr_" : "en_";
-    string modeSuffix = to_string(mode + 3); // Correcting mode value to correspond to word length
+    string modeSuffix = to_string(mode + 3);
     WORDS_FILE = langPrefix + modeSuffix + ".txt";
     SCORES_FILE = langPrefix + modeSuffix + "_scores.dat";
 }
-
 int main()
 {
     int choice;
-    int language = 2; // Default to English
-    int mode = 2;     // Default to 5-letter words
-
+    int language = 2;
+    int mode = 2;
     vector<string> words;
-
     do
     {
         displayTitle();
         displayMenu();
         cout << "Unesi svoj izbor: ";
         cin >> choice;
-
         switch (choice)
         {
         case 1:
             setWordsAndScoresFile(language, mode);
-            words.clear(); // Clear the words vector before loading new words
+            words.clear();
             loadWords(words);
             if (words.empty())
             {
@@ -221,6 +201,5 @@ int main()
             cout << "Nevažeći izbor. Pokušaj ponovo." << endl;
         }
     } while (choice != 4);
-
     return 0;
 }
