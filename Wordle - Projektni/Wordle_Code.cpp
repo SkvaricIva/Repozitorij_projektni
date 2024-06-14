@@ -10,6 +10,27 @@ using namespace std;
 string SCORES_FILE = "en_5_scores.dat";
 string WORDS_FILE = "en_5.txt";
 
+void waitforEnter()
+{
+    cin.ignore();
+    cin.get();
+}
+
+void enteringToMenu()
+{
+    cout << endl
+         << endl;
+    cout << "Pritisnite Enter za povratak u izbornik...";
+    waitforEnter();
+}
+
+void system_clear()
+{
+    printf(
+        "\033[2J"
+        "\033[1;1H");
+}
+
 void loadWords(vector<string> &words)
 {
     ifstream infile(WORDS_FILE);
@@ -64,7 +85,7 @@ void displayScores()
         cout << "Nije moguće otvoriti datoteku s rezultatima: " << SCORES_FILE << endl;
         return;
     }
-    cout << "Najbolji rezultati:" << endl;
+    cout << "Rezultati:" << endl;
     while (file.peek() != EOF)
     {
         int nameLength;
@@ -107,16 +128,16 @@ void displayBoard(const vector<string> &guesses, const string &secret, int wordL
             if (guess[i] == secret[i])
             {
                 cout << "\033[32m  " << guess[i] << "  \033[0m|";
-                letterCount[guess[i]]--;
+                letterCount[guess[i]]--; // Smanjimo brojač slova u tajnoj riječi
             }
-            else if (letterCount[guess[i]] > 0 && secret.find(guess[i]) == secret.find(guess[i])) //Provjerimo je li trenutni znak prvo pojavljivanje istog znaka u tajnoj riječi
+            else if (letterCount[guess[i]] > 0 && secret.find(guess[i]) != string::npos) // Provjerimo je li trenutni znak prvo pojavljivanje istog znaka u tajnoj riječi
             {
-                cout << "\033[33m  " << guess[i] << "  \033[0m|"; //Slovo je žutom bojom
-                letterCount[guess[i]]--;
+                cout << "\033[33m  " << guess[i] << "  \033[0m|"; // Označimo slovo žutom bojom
+                letterCount[guess[i]]--;                          // Smanjimo brojač slova u tajnoj riječi
             }
             else
             {
-                cout << "\033[30m  " << guess[i] << "  \033[0m|"; //Slovo je crnom bojom
+                cout << "\033[30m  " << guess[i] << "  \033[0m|"; // Označimo slovo crnom bojom
             }
         }
         cout << endl;
@@ -143,7 +164,7 @@ void playGame(const vector<string> &words, int wordLength, const string &playerN
 
     while (attempts > 0)
     {
-        (void)system("clear");
+        system_clear();
         cout << "Broj pokušaja: " << attempts << endl;
         displayBoard(guesses, secret, wordLength);
         string guess;
@@ -153,39 +174,30 @@ void playGame(const vector<string> &words, int wordLength, const string &playerN
         {
             cout << "Nezadovoljavajuća duljina pretpostavke." << endl;
             cout << "Pokušajte ponovno pritiskom na Enter" << endl;
-            cin.ignore();
-            cin.get();
+            waitforEnter();
             continue;
         }
         guesses.push_back(guess);
         if (guess == secret)
         {
-            (void)system("clear");
+            system_clear();
             displayBoard(guesses, secret, wordLength);
-            cout << "Bravo! Pogodio si riječ." << endl;
-            saveScore(playerName, true, attempts, secret);
-            cout << endl;
-            cout << "Svoj uspjeh možete vidjeti na pregledu najboljih rezultata" << endl
-                 << endl
+            cout << "Bravo! Pogodio si riječ." << endl
                  << endl;
-            cout << "Pritisnite Enter za povratak u izbornik...";
-            cin.ignore();
-            cin.get();
+            saveScore(playerName, true, attempts, secret);
+            cout << "Svoj uspjeh možete vidjeti na pregledu najboljih rezultata" << endl;
+            enteringToMenu();
             return;
         }
         attempts--;
     }
-    (void)system("clear");
+    system_clear();
     displayBoard(guesses, secret, wordLength);
-    cout << "Kraj igre! Riječ je bila: " << secret << endl;
-    saveScore(playerName, false, 0, secret);
-    cout << endl;
-    cout << "Svoj uspjeh možete vidjeti na pregledu najboljih rezultata" << endl
-         << endl
+    cout << "Kraj igre! Riječ je bila: " << secret << endl
          << endl;
-    cout << "Pritisnite Enter za povratak u izbornik...";
-    cin.ignore();
-    cin.get();
+    saveScore(playerName, false, 0, secret);
+    cout << "Svoj uspjeh možete vidjeti na pregledu najboljih rezultata" << endl;
+    enteringToMenu();
 }
 
 void displayTitle()
@@ -205,7 +217,7 @@ void displayMenu()
     cout << "1. Započni igru" << endl;
     cout << "2. Modovi" << endl;
     cout << "3. Pravila igre" << endl;
-    cout << "4. Pregled najboljih rezultata" << endl;
+    cout << "4. Pregled rezultata" << endl;
     cout << "5. Izlaz" << endl;
 }
 
@@ -247,13 +259,6 @@ void displayRules()
     cout << endl;
 }
 
-void waitForEnter()
-{
-    cout << "\n\nPritisnite Enter za povratak u izbornik...";
-    cin.ignore();
-    cin.get();
-}
-
 int main()
 {
     int choice;
@@ -263,7 +268,7 @@ int main()
 
     do
     {
-        (void)system("clear");
+        system_clear();
         displayTitle();
         displayMenu();
         cout << "Unesi svoj izbor: ";
@@ -275,15 +280,17 @@ int main()
             string playerName;
             cout << "Unesite svoje ime: ";
             cin >> playerName;
-            (void)system("clear");
-            cout << "UPOZORENJE: \n"
+            system_clear();
+            cout << "UPOZORENJE: " << endl
                  << endl;
             cout << "1. Unesene riječi moraju uvijek sadržavati točno " << mode + 3 << " slova." << endl;
-            cout << "2. Unesene riječi moraju biti unesene sa malim slovima." << endl;
-            cout << "\nSretno i zabavi se" << endl;
-            cout << "\n\nPritisnite Enter za početak igre...";
-            cin.ignore();
-            cin.get();
+            cout << "2. Unesene riječi moraju biti unesene sa malim slovima." << endl
+                 << endl;
+            cout << "Sretno i zabavi se" << endl;
+            cout << endl
+                 << endl;
+            cout << "Pritisnite Enter za početak igre...";
+            waitforEnter();
             setWordsAndScoresFile(language, mode);
             words.clear();
             loadWords(words);
@@ -296,7 +303,7 @@ int main()
             break;
         }
         case 2:
-            (void)system("clear");
+            system_clear();
             displayOptions();
             cout << "Unesi svoj izbor: ";
             cin >> language;
@@ -305,21 +312,22 @@ int main()
             cin >> mode;
             break;
         case 3:
-            (void)system("clear");
+            system_clear();
             displayRules();
-            waitForEnter();
+            enteringToMenu();
             break;
         case 4:
-            (void)system("clear");
+            system_clear();
             setWordsAndScoresFile(language, mode);
             displayScores();
-            waitForEnter();
+            enteringToMenu();
             break;
         case 5:
             cout << "Izlaženje..." << endl;
             break;
         default:
-            cout << "Nevažeći izbor. Pokušaj ponovo." << endl;
+            cout << "Nevažeći izbor. Pokušaj ponovo pritiskom na Enter." << endl;
+            waitforEnter();
         }
     } while (choice != 5);
 
