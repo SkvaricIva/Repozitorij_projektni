@@ -320,6 +320,10 @@ int main()
             system_clear();
             setWordsAndScoresFile(language, mode);
             displayScores();
+            cout << endl
+                 << endl
+                 << endl;
+            cout << "Ako želite vidjeti rezultate iz druge vrste moda, morate promijeniti postavke modova i vratiti se nakon što se promijenili mod." << endl;
             enteringToMenu();
             break;
         case 5:
